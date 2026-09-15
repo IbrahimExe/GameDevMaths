@@ -89,3 +89,74 @@ Matrix4x4 Matrix4x4::Transpose() const
 
     return result;
 }
+
+
+// Q10. Q11. Collision Detection Implementation
+bool PointInAABB(const Vector3& point, const AABB& box)
+{
+    // Check if point is between min and max on both X and Y axes
+    return (point.x >= box.min.x && point.x <= box.max.x &&
+        point.y >= box.min.y && point.y <= box.max.y);
+}
+
+bool PointInCircle(const Vector3& point, const Circle& circle)
+{
+    Vector3 distanceVec = point - circle.center;
+
+    float distanceSquared = distanceVec.Dot(distanceVec);
+    float radiusSquared = circle.radius * circle.radius;
+
+    return distanceSquared <= radiusSquared;
+}
+
+bool IntersectAABB(const AABB& a, const AABB& b)
+{
+    // If the boxes are NOT overlapping on the X axis, or NOT overlapping on the Y axis, 
+    // they don't intersect.
+    // reverse this logic to return true if they DO intersect
+    return (a.min.x <= b.max.x && a.max.x >= b.min.x &&
+        a.min.y <= b.max.y && a.max.y >= b.min.y);
+}
+
+bool IntersectCircle(const Circle& a, const Circle& b)
+{
+    Vector3 distanceVec = a.center - b.center;
+    float distanceSquared = distanceVec.Dot(distanceVec);
+
+    float radiusSum = a.radius + b.radius;
+    float radiusSumSquared = radiusSum * radiusSum;
+
+    return distanceSquared <= radiusSumSquared;
+}
+
+bool IntersectCircleAABB(const Circle& circle, const AABB& box)
+{
+    // Find the closest point on the AABB perimeter to the circle's center
+    Vector3 closestPoint = circle.center;
+
+    // Clamp X
+    if (closestPoint.x < box.min.x)
+    {
+        closestPoint.x = box.min.x;
+    }
+    else if (closestPoint.x > box.max.x)
+    {
+        closestPoint.x = box.max.x;
+    }
+
+    // Clamp Y
+    if (closestPoint.y < box.min.y)
+    {
+        closestPoint.y = box.min.y;
+    }
+    else if (closestPoint.y > box.max.y)
+    {
+        closestPoint.y = box.max.y;
+    }
+
+    // Check if distance from closest point to circle center is less than radius
+    Vector3 distanceVec = circle.center - closestPoint;
+    float distanceSquared = distanceVec.Dot(distanceVec);
+
+    return distanceSquared <= (circle.radius * circle.radius);
+}
