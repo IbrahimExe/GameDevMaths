@@ -52,7 +52,7 @@ void Vector3::Normalize()
     }
 }
 
-// Matrix4x4 Implementation
+// Q6. Matrix4x4 Implementation
 Matrix4x4::Matrix4x4() 
 {
     for (int i = 0; i < 4; ++i) 
@@ -72,4 +72,20 @@ Matrix4x4 Matrix4x4::Identity()
     mat.m[2][2] = 1.0f;
     mat.m[3][3] = 1.0f;
     return mat;
+}
+
+Matrix4x4 Matrix4x4::Transpose() const
+{
+    Matrix4x4 result;
+
+    for (int i = 0; i < 4; ++i)
+    {
+        for (int j = 0; j < 4; ++j)
+        {
+            // Swap rows and columns
+            result.m[i][j] = m[j][i];
+        }
+    }
+
+    return result;
 }

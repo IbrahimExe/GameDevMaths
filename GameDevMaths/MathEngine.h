@@ -29,10 +29,14 @@ struct Vector3
     void Normalize();
 };
 
+// Q6.
 struct Matrix4x4 
 {
     float m[4][4];
 
     Matrix4x4();
+
     static Matrix4x4 Identity();
+
+    Matrix4x4 Transpose() const;
 };
